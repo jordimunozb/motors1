@@ -5,6 +5,7 @@ function final(self)
 end
 
 function update(self, dt)
+end
 
 function on_message(self, message_id, message, sender)
 end
