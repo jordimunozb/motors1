@@ -1,0 +1,38 @@
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	self.collision_id = nil -- objecte amb que el cursor esta colisionant
+	self.click = false 		-- "true" si el usuari està mantenent el click
+	self.zDimencion = 1
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("collision_response") then
+		if not self.collision_id then
+			self.collision_id = message.other_id
+		end
+	end
+end
+
+function on_input(self, action_id, action)
+	go.set_position(vmath.vector3(action.x, action.y, self.zDimencion))
+	
+	if action_id == hash("touchLeft") then
+		
+		if action.pressed then 
+			msg.post("#collisionobject", "enable")
+			self.click = true
+			
+		elseif action.released then 
+			msg.post("#collisionobject", "disable")
+			self.click = false
+			if self.collision_id then
+				msg.post(self.collision_id, "clicked")
+			end
+			self.collision_id = nil 
+		end
+		
+		if self.click and self.collision_id then
+			msg.post(self.collision_id, "clicking")	
+		end
+	end
+end

@@ -1,0 +1,25 @@
+
+function init(self)	
+	--obtenim les dimensions del "Game Wordl". Amplada o X -> [width] i Altura o Y -> [height]
+	self.widthP = tonumber(sys.get_config("display.width"))
+	self.heigthP = tonumber(sys.get_config("display.height"))
+	self.zDimencio = 0
+				--[url, position, rotation [en "quaternions"], properties, scale]
+	factory.create("#factory", vmath.vector3(self.widthP/2, self.heigthP/2, self.zDimencio), nil, {}, 1) 
+	self.objNumber = 1
+end
+
+function final(self)
+end
+
+function update(self, dt)
+end
+
+function on_message(self, message_id, message, sender)
+end
+
+function on_input(self, action_id, action)
+end
+
+function on_reload(self)
+end
