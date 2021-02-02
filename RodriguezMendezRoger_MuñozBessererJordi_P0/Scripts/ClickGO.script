@@ -1,23 +1,28 @@
-function init(self)
-end
+go.property("first", false)
 
-function final(self)
+function init(self)
+	self.dtPlus = 0
 end
 
 function update(self, dt)
+	if not self.first then --si som el primer creat no anem suman punts cada 3 segons
+		self.dtPlus = self.dtPlus + dt
+
+		if self.dtPlus > 3 then
+			self.dtPlus = 0
+			msg.post("/Clicks#ClickPoints", "addExtra")
+		end
+	end
 end
 
 function on_message(self, message_id, message, sender)
+	if message_id == hash("youFirst") then 
+		self.first = true 
+	end
 	if message_id == hash("clicked") then 
 		msg.post("/Clicks#ClickPoints", "clicked")
 		go.set("#clickSprite","scale", vmath.vector3(1,1,1))
 	elseif message_id == hash("clicking") then 
 		go.set("#clickSprite","scale", vmath.vector3(1.5,1.5,1))
 	end
-end
-
-function on_input(self, action_id, action)
-end
-
-function on_reload(self)
 end

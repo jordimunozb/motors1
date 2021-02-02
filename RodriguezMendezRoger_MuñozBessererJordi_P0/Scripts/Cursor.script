@@ -8,7 +8,7 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash("collision_response") then
 		if not self.collision_id then
-			self.collision_id = message.other_id
+			self.collision_id = message.other_id --guardem la informació amb qui colisionem 
 		end
 	end
 end

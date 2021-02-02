@@ -1,25 +1,25 @@
-
 function init(self)	
 	--obtenim les dimensions del "Game Wordl". Amplada o X -> [width] i Altura o Y -> [height]
 	self.widthP = tonumber(sys.get_config("display.width"))
 	self.heigthP = tonumber(sys.get_config("display.height"))
 	self.zDimencio = 0
 				--[url, position, rotation [en "quaternions"], properties, scale]
-	factory.create("#factory", vmath.vector3(self.widthP/2, self.heigthP/2, self.zDimencio), nil, {}, 1) 
-	self.objNumber = 1
-end
-
-function final(self)
-end
-
-function update(self, dt)
+	self.firstObj = factory.create("#factory", vmath.vector3(self.widthP/2, self.heigthP/2, self.zDimencio), nil, {}, 1) 
+	msg.post(self.firstObj, "youFirst") --informem que es el primer creat
+	self.objN = 1
+	self.posY = {}
+	self.posX = {}
+	self.posX[2] = (self.widthP/2)/2
+	self.posY[2] = (self.heigthP/2)
+	self.posX[3] = self.widthP - ((self.widthP/2)/2)
+	self.posY[3] = (self.heigthP/2)
+	self.posX[4] = (self.widthP/2)
+	self.posY[4] = (self.heigthP/2)/2
 end
 
 function on_message(self, message_id, message, sender)
-end
-
-function on_input(self, action_id, action)
-end
-
-function on_reload(self)
+	if message_id == hash("newSpawn") and self.objN < 4 then --tenim un maxim de 4 possicions en aquest cas
+		self.objN = self.objN + 1
+		factory.create("#factory", vmath.vector3(self.posX[self.objN], self.posY[self.objN], self.zDimencio), nil, {}, 1) 
+	end
 end
