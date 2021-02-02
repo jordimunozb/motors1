@@ -1,0 +1,19 @@
+function init(self)
+	self.NodeId = gui.get_node("TextClicks")
+	self.clicks = 0
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("clicked") then 
+		self.clicks = self.clicks + 1;
+		gui.set_text(self.NodeId, "CLICKS: "..self.clicks)
+		
+		if self.clicks%10 == 0 and self.clicks > 0 then
+			spawnClicker()
+		end
+	end
+end
+
+function spawnClicker()
+	msg.post("/createClickGO#spawnCliks", "newSpawn")	
+end

@@ -1,8 +1,9 @@
+go.property("zDimencion", 1)
+
 function init(self)
 	msg.post(".", "acquire_input_focus")
 	self.collision_id = nil -- objecte amb que el cursor esta colisionant
 	self.click = false 		-- "true" si el usuari està mantenent el click
-	self.zDimencion = 1
 end
 
 function on_message(self, message_id, message, sender)
@@ -16,23 +17,24 @@ end
 function on_input(self, action_id, action)
 	go.set_position(vmath.vector3(action.x, action.y, self.zDimencion))
 	
-	if action_id == hash("touchLeft") then
-		
-		if action.pressed then 
+	if action_id == hash("touchLeft") then 
+		--hem tocat el boto esquerre del ratoli, que estem fent amb ell?
+		if action.pressed then --l'estem apretan -> acció
 			msg.post("#collisionobject", "enable")
-			self.click = true
+			self.click = true --oju que apretem uf quina presió
 			
-		elseif action.released then 
+		elseif action.released then --l'hem alliberat -> acció
 			msg.post("#collisionobject", "disable")
-			self.click = false
+			self.click = false --ja no apretem, lliure de presions
+			
 			if self.collision_id then
-				msg.post(self.collision_id, "clicked")
+				msg.post(self.collision_id, "clicked") --hem clicat aquest objecte, que senteri
 			end
-			self.collision_id = nil 
+			self.collision_id = nil --ja t hem clicat ara t deixem trankil
 		end
 		
-		if self.click and self.collision_id then
-			msg.post(self.collision_id, "clicking")	
+		if self.click and self.collision_id then --estem presionant i hi ha colisió? 
+			msg.post(self.collision_id, "clicking")	--uoo! que fort envia-l'hi la info
 		end
 	end
 end

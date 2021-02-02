@@ -1,28 +1,28 @@
 go.property("first", false)
-
-function init(self)
-	self.dtPlus = 0
-end
+go.property("dtPlus", 0)
 
 function update(self, dt)
-	if not self.first then --si som el primer creat no anem suman punts cada 3 segons
+	if not self.first then --si som el primer creat no anem suman punts cada 3 segons, som racanos
 		self.dtPlus = self.dtPlus + dt
 
 		if self.dtPlus > 3 then
-			self.dtPlus = 0
-			msg.post("/Clicks#ClickPoints", "addExtra")
+			self.dtPlus = 0 --reiniciem el contador i enviem un click extra
+			msg.post("/Clicks#GUI", "clicked")
 		end
 	end
 end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("youFirst") then 
-		self.first = true 
+		self.first = true -- som el primer papa?
 	end
+	
 	if message_id == hash("clicked") then 
-		msg.post("/Clicks#ClickPoints", "clicked")
+		msg.post("/Clicks#GUI", "clicked") --enviem un click fet i dret
 		go.set("#clickSprite","scale", vmath.vector3(1,1,1))
+		
 	elseif message_id == hash("clicking") then 
-		go.set("#clickSprite","scale", vmath.vector3(1.5,1.5,1))
+		go.set("#clickSprite","scale", vmath.vector3(1.5,1.5,1)) --quina presió, ens estan clicant
 	end
+	
 end
