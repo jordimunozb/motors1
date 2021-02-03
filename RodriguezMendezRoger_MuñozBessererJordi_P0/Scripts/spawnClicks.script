@@ -22,5 +22,10 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("newSpawn") and self.objN < 3 then --tenim un maxim de 4 possicions [0 a 3] en aquest cas
 		self.objN = self.objN + 1
 		factory.create("#factory", vmath.vector3(self.posX[self.objN], self.posY[self.objN], self.zDimencion), nil, {}, 1) 
+		msg.post("/SoundController#SoundController", "playSound", { soundUrl = "/SoundController#SoundSpawn", gain = 0.5, duracioNoMolestar = 1.0})
+	end
+	
+	if self.objN >= 3 then
+		msg.post("/Clicks#GUI", "stopSpawn")
 	end
 end

@@ -8,6 +8,7 @@ function update(self, dt)
 		if self.dtPlus > 3 then
 			self.dtPlus = 0 --reiniciem el contador i enviem un click extra
 			msg.post("/Clicks#GUI", "clicked")
+			msg.post("/SoundController#SoundController", "playSound", { soundUrl = "/SoundController#SoundExtraPoint", gain = 0.5, duracioNoMolestar = 0.1})
 		end
 	end
 end
@@ -20,6 +21,7 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("clicked") then 
 		msg.post("/Clicks#GUI", "clicked") --enviem un click fet i dret
 		go.set("#clickSprite","scale", vmath.vector3(1,1,1))
+		msg.post("/SoundController#SoundController", "playSound", { soundUrl = "/SoundController#SoundClicked", gain = 0.5, duracioNoMolestar = 0.1})
 		
 	elseif message_id == hash("clicking") then 
 		go.set("#clickSprite","scale", vmath.vector3(1.5,1.5,1)) --quina presió, ens estan clicant
