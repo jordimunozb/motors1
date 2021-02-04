@@ -1,9 +1,11 @@
 function init(self)
 	self.NodeTextC = gui.get_node("TextClicks")
+	self.NodeTextF= gui.get_node("TextFULL")
 	self.NodePie = gui.get_node("PieNewObject")
 	self.clicks = 0
 	self.spawn = true
 	gui.set_fill_angle(self.NodePie, 0)
+	gui.animate(self.NodeTextF, "color.w", 0, gui.EASING_INCIRC, 0)
 end
 
 function on_message(self, message_id, message, sender)
@@ -12,8 +14,8 @@ function on_message(self, message_id, message, sender)
 		gui.set_text(self.NodeTextC, "CLICKS: "..self.clicks)
 
 		if self.spawn then 
-			local vertices = gui.get_fill_angle(self.NodePie)
-			gui.set_fill_angle(self.NodePie, vertices + 36)
+			local angles = gui.get_fill_angle(self.NodePie)
+			gui.set_fill_angle(self.NodePie, angles + 36)
 
 			if self.clicks%10 == 0 and self.clicks > 0 then
 				spawnClicker()
@@ -26,6 +28,7 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("stopSpawn") then 
 		self.spawn = false
 		gui.set_fill_angle(self.NodePie, 0)
+		gui.animate(self.NodeTextF, "color.w", 1, gui.EASING_LINEAR, 2)
 	end
 end
 

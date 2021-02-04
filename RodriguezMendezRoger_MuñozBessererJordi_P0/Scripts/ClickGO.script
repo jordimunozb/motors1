@@ -1,6 +1,10 @@
 go.property("first", false)
 go.property("dtPlus", 0)
 
+function init(self)
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_BACKWARD, go.get_position().y+500, go.EASING_INBOUNCE, 1)
+end
+
 function update(self, dt)
 	if not self.first then --si som el primer creat no anem suman punts cada 3 segons, som racanos
 		self.dtPlus = self.dtPlus + dt
@@ -8,7 +12,8 @@ function update(self, dt)
 		if self.dtPlus > 3 then
 			self.dtPlus = 0 --reiniciem el contador i enviem un click extra
 			msg.post("/Clicks#GUI", "clicked")
-			msg.post("/SoundController#SoundController", "playSound", { soundUrl = "/SoundController#SoundExtraPoint", gain = 0.5, duracioNoMolestar = 0.1})
+			go.animate(".", "position.y", go.PLAYBACK_ONCE_BACKWARD, go.get_position().y+5, go.EASING_INBOUNCE, 1)
+			msg.post("/SoundController#SoundController", "playSound", { soundUrl = "/SoundController#SoundExtraPoint", gain = 1, duracioNoMolestar = 0.1})
 		end
 	end
 end

@@ -1,9 +1,27 @@
 go.property("zDimencion", 1)
-
+go.property("dtCMAX", 0.05)
 function init(self)
 	msg.post(".", "acquire_input_focus")
+	msg.post("#collisionobject", "disable") 
 	self.collision_id = nil -- objecte amb que el cursor esta colisionant
 	self.click = false 		-- "true" si el usuari està mantenent el click
+	self.dtC = 0 			--el temps que pase desde el "primer click"
+	self.firstC = true 		-- "true" si volem obtenir el "primer" click de l'usuari
+end
+
+function update(self, dt)
+	if self.click and self.firstC then -- estem fet click? i a sobre es el primer? uu contem el temps
+		self.dtC = self.dtC + dt
+		if self.dtC > self.dtCMAX then -- hem pasat massa temps clicant, desavilitem 
+			resetDTandC(self)
+		end
+	end
+end
+
+function resetDTandC(self)
+	self.dtC = 0 --recetegem el contador
+	self.firstC = not self.firstC -- si ere el primer click ja no ho es, i si no ho ere ja esta preparat per el proxim
+	msg.post("#collisionobject", "disable") -- no ens interese coneixes mes colisions
 end
 
 function on_message(self, message_id, message, sender)
@@ -15,25 +33,25 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
-	go.set_position(vmath.vector3(action.x, action.y, self.zDimencion))
+	go.set_position(vmath.vector3(action.x, action.y, self.zDimencion))-- movem tot a on estigui el ratoli
 	
 	if action_id == hash("touchLeft") then 
 		--hem tocat el boto esquerre del ratoli, que estem fent amb ell?
-		if action.pressed then --l'estem apretan -> acció
-			msg.post("#collisionobject", "enable")
+		if action.pressed and self.firstC then --> l'estem apretan -> acció
+			msg.post("#collisionobject", "enable") -- ens interese la colisió
 			self.click = true --oju que apretem uf quina presió
 			
-		elseif action.released then --l'hem alliberat -> acció
-			msg.post("#collisionobject", "disable")
-			self.click = false --ja no apretem, lliure de presions
+		elseif action.released then --> l'hem alliberat -> acció
+			resetDTandC(self)  --ja no apretem, lliure de presions
+			self.click = false
 			
 			if self.collision_id then
-				msg.post(self.collision_id, "clicked") --hem clicat aquest objecte, que senteri
+				msg.post(self.collision_id, "clicked") --hem clicat a aquest objecte, que senteri
 			end
 			self.collision_id = nil --ja t hem clicat ara t deixem trankil
 		end
 		
-		if self.click and self.collision_id then --estem presionant i hi ha colisió? 
+		if self.click and self.collision_id then --hem fet click i hi ha colisió? 
 			msg.post(self.collision_id, "clicking")	--uoo! que fort envia-l'hi la info
 		end
 	end

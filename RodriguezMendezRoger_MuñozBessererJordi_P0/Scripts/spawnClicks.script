@@ -7,6 +7,7 @@ function init(self)
 				--[url, position, rotation [en "quaternions"], properties, scale]
 	self.firstObj = factory.create("#factory", vmath.vector3(self.widthP/2, self.heigthP/2, self.zDimencion), nil, {}, 1) 
 	msg.post(self.firstObj, "youFirst") --informem que es el primer creat
+	msg.post("/SoundController#SoundController", "playSound", { soundUrl = "/SoundController#SoundSpawn", gain = 0.5, duracioNoMolestar = 1.0})
 	self.objN = 0
 	self.posY = {}
 	self.posX = {}

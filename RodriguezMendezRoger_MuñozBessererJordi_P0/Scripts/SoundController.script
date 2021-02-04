@@ -1,10 +1,11 @@
 function init(self)
 	self.sons = {} --preparem la llista de sons
+	
 end
 
 function update(self, dt)
 	-- Usan les URLs com a index, mirem en cada so i anem restan la seva durada
-	-- un cop siguin durades negatives (ja han acavat el tempsde no molestar/duplicació) 
+	-- un cop siguin durades negatives (ja han acavat el temps de no molestar/duplicació) 
 	-- "eliminem l'index"/igualem a null/nil
 	-- i -> index
 	for i,_ in pairs(self.sons) do
@@ -18,7 +19,7 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash("playSound") then
 		if self.sons[message.soundUrl] == nil then --no hi ha repetits, per tan afegim
-			-- afegim el temps de "no duplicació" del so per evitar que escali
+			-- afegim el temps de "no duplicació/molestar" del so per evitar que escali
 			self.sons[message.soundUrl] = message.duracioNoMolestar 
 			sound.play(message.soundUrl, { gain = message.gain })
 		end
